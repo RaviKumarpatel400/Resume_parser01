@@ -8,5 +8,6 @@ scikit-learn
 beautifulsoup4
 flask-mysql-connector==1.0.1
 flask-bcrypt
+flask_mysqldb
 gunicorn
 
