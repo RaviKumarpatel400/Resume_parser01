@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Candidate Details</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css" rel="stylesheet">
+</head>
+<body class="bg-gray-50">
+    <!-- Professional Fixed Header -->
+    <header class="bg-white border-b border-gray-200 fixed w-full z-50">
+        <div class="container mx-auto px-4 py-3">
+            <nav class="flex items-center justify-between">
+                <h1 class="text-2xl font-bold text-transparent bg-clip-text bg-gradient-to-r from-blue-600 to-purple-600">
+                    Candidate Details
+                </h1>
+                <div class="hidden md:flex space-x-6">
+                    <a href="{{ url_for('index') }}" class="nav-link">
+                        <i class="fas fa-home mr-2"></i>Home
+                    </a>
+                    <a href="{{ url_for('similarity_score') }}" class="nav-link">
+                        <i class="fas fa-percentage mr-2"></i>Similarity Score
+                    </a>
+                    <a href="{{ url_for('visualization_graph') }}" class="nav-link">
+                        <i class="fas fa-chart-line mr-2"></i>Pie Chart
+                    </a>
+                    <a href="{{ url_for('similarity_bar_chart') }}" class="nav-link">
+                        <i class="fas fa-chart-bar mr-2"></i>Bar Chart
+                    </a>
+                    <a href="{{ url_for('dashboard') }}" class="nav-link">
+                        <i class="fas fa-tachometer-alt mr-2"></i>Dashboard
+                    </a>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="pt-24 pb-12 bg-gradient-to-br from-blue-900 via-purple-900 to-pink-900 text-white">
+        <div class="container mx-auto px-4">
+            <div class="text-center mb-8 animate__animated animate__fadeIn">
+                <h1 class="text-4xl font-bold mb-4">Discover Top Talent</h1>
+                <p class="text-xl text-blue-100">Comprehensive candidate profiles for informed decisions</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Main Content -->
+    <main class="container mx-auto px-4 py-12">
+        {% for i in range(resume_details|length) %}
+        <div class="bg-white rounded-2xl shadow-xl mb-8 overflow-hidden animate__animated animate__fadeInUp">
+            <!-- Enhanced Candidate Header -->
+            <div class="bg-gradient-to-r from-blue-600 to-purple-600 p-6 text-white">
+                <div class="flex justify-between items-center">
+                    <div class="flex items-center space-x-4">
+                        <div class="w-16 h-16 bg-white rounded-full flex items-center justify-center">
+                            <i class="fas fa-user-tie text-3xl text-purple-600"></i>
+                        </div>
+                        <div>
+                            <h2 class="text-2xl font-bold">Candidate {{ i + 1 }}</h2>
+                            <p class="text-blue-100">Professional Profile #{{ "%03d" | format(i + 1) }}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Professional Info Cards -->
+            <div class="p-8">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+                    <div class="info-card">
+                        <i class="fas fa-user text-blue-500 text-2xl"></i>
+                        <div>
+                            <span class="text-sm text-gray-500">Full Name</span>
+                            <p class="text-lg font-medium">{{ resume_details[i]['name'] }}</p>
+                        </div>
+                    </div>
+                    <div class="info-card">
+                        <i class="fas fa-envelope text-purple-500 text-2xl"></i>
+                        <div>
+                            <span class="text-sm text-gray-500">Email Address</span>
+                            <p class="text-lg font-medium">{{ resume_details[i]['email'] }}</p>
+                        </div>
+                    </div>
+                    <div class="info-card">
+                        <i class="fas fa-phone text-pink-500 text-2xl"></i>
+                        <div>
+                            <span class="text-sm text-gray-500">Phone Number</span>
+                            <p class="text-lg font-medium">{{ resume_details[i]['phone'] }}</p>
+                        </div>
+                    </div>
+                    <div class="info-card">
+                        <i class="fas fa-graduation-cap text-indigo-500 text-2xl"></i>
+                        <div>
+                            <span class="text-sm text-gray-500">Education</span>
+                            <p class="text-lg font-medium">{{ resume_details[i]['education'] }}</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Enhanced Detailed Sections -->
+                <div class="space-y-8">
+                    <div class="detailed-section">
+                        <h3 class="section-title">
+                            <i class="fas fa-cogs text-blue-500 mr-2"></i>Professional Skills
+                        </h3>
+                        <div class="flex flex-wrap gap-2 mt-4">
+                            {% for skill in resume_details[i]['skills'] %}
+                            <span class="skill-badge">{{ skill }}</span>
+                            {% endfor %}
+                        </div>
+                    </div>
+
+                    <div class="detailed-section">
+                        <h3 class="section-title">
+                            <i class="fas fa-project-diagram text-purple-500 mr-2"></i>Project Portfolio
+                        </h3>
+                        <p class="text-gray-700 leading-relaxed">{{ resume_details[i]['projects'] }}</p>
+                    </div>
+
+                    <div class="detailed-section">
+                        <h3 class="section-title">
+                            <i class="fas fa-briefcase text-pink-500 mr-2"></i>Professional Experience
+                        </h3>
+                        <p class="text-gray-700 leading-relaxed">{{ resume_details[i]['experience'] }}</p>
+                    </div>
+
+                    {% if non_matching_skills[i] %}
+                    <div class="detailed-section">
+                        <h3 class="section-title">
+                            <i class="fas fa-exclamation-triangle text-orange-500 mr-2"></i>Skills Gap Analysis
+                        </h3>
+                        <div class="flex flex-wrap gap-2 mt-4">
+                            {% for skill in non_matching_skills[i] %}
+                            <span class="gap-badge">{{ skill }}</span>
+                            {% endfor %}
+                        </div>
+                    </div>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </main>
+
+    <style>
+        /* Professional Components */
+        .nav-link {
+            display: flex;
+            align-items: center;
+            color: #4b5563; /* gray-600 */
+            font-weight: 500; /* font-medium */
+            transition: color 0.3s ease;
+        }
+        .nav-link:hover {
+            color: #7c3aed; /* purple-600 */
+        }
+        .info-card {
+            display: flex;
+            align-items: center;
+            gap: 1rem; /* space-x-4 */
+            background-color: #f9fafb; /* bg-gray-50 */
+            padding: 1.5rem; /* p-6 */
+            border-radius: 0.75rem; /* rounded-xl */
+            transition: background-color 0.3s ease;
+        }
+        .info-card:hover {
+            background-color: #f3f4f6; /* bg-gray-100 */
+        }
+        .section-title {
+            font-size: 1.25rem; /* text-xl */
+            font-weight: 600; /* font-semibold */
+            display: flex;
+            align-items: center;
+            margin-bottom: 0.5rem; /* mb-2 */
+        }
+        .detailed-section {
+            background-color: #fff; /* bg-white */
+            padding: 1.5rem; /* p-6 */
+            border-radius: 0.75rem; /* rounded-xl */
+            box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05); /* shadow-sm */
+            transition: box-shadow 0.3s ease;
+        }
+        .detailed-section:hover {
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* hover:shadow-md */
+        }
+        .skill-badge {
+            padding: 0.5rem 1rem; /* px-4 py-2 */
+            background-color: #bfdbfe; /* bg-blue-100 */
+            color: #1d4ed8; /* text-blue-700 */
+            border-radius: 9999px; /* rounded-full */
+            font-size: 0.875rem; /* text-sm */
+            font-weight: 500; /* font-medium */
+            transition: background-color 0.3s ease;
+        }
+        .skill-badge:hover {
+            background-color: #93c5fd; /* bg-blue-200 */
+        }
+        .gap-badge {
+            padding: 0.5rem 1rem; /* px-4 py-2 */
+            background-color: #fed7aa; /* bg-orange-100 */
+            color: #c2410c; /* text-orange-700 */
+            border-radius: 9999px; /* rounded-full */
+            font-size: 0.875rem; /* text-sm */
+            font-weight: 500; /* font-medium */
+            transition: background-color 0.3s ease;
+        }
+        .gap-badge:hover {
+            background-color: #fdba74; /* bg-orange-200 */
+        }
+    
+        /* Enhanced Animations */
+        @keyframes slideIn {
+            from {
+                transform: translateY(20px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+        .animate-slide-in {
+            animation: slideIn 0.5s ease-out forwards;
+        }
+    </style>
+    
+</body>
+</html>

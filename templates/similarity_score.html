@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title> Resume scoring Dashboard</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.19/tailwind.min.css" rel="stylesheet">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/js/all.min.js"></script>
+</head>
+<body class="bg-slate-100">
+    <!-- Modern Company Header -->
+    <header class="bg-white fixed w-full z-50 shadow-lg">
+        <div class="container mx-auto px-4">
+            <nav class="flex items-center justify-between h-20">
+                <div class="flex items-center space-x-8">
+                    <div class="text-2xl font-bold flex items-center">
+                        <div class="w-10 h-10 rounded bg-gradient-to-tr from-blue-600 to-purple-600 flex items-center justify-center text-white mr-3">SS</div>
+                        <span class="bg-clip-text text-transparent bg-gradient-to-r from-blue-600 to-purple-600">
+                           Score
+                        </span>
+                    </div>
+                    <div class="hidden md:flex space-x-6">
+                        <a href="#" class="nav-link">Dashboard</a>
+                        <a href="#" class="nav-link">Candidates</a>
+                        <a href="#" class="nav-link">Analytics</a>
+                        <a href="#" class="nav-link">Reports</a>
+                    </div>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <button class="btn-secondary">
+                        <i class="fas fa-download mr-2"></i>Export
+                    </button>
+                    <a href="{{ url_for('index') }}" class="btn-primary">
+                        <i class="fas fa-home mr-2"></i>Home
+                    </a>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Eye-catching Hero Section -->
+    <section class="pt-32 pb-20 bg-gradient-to-br from-blue-600 via-purple-600 to-pink-500">
+        <div class="absolute inset-0 overflow-hidden">
+            <div class="absolute w-full h-full bg-pattern opacity-10"></div>
+            <div class="absolute -bottom-1/2 -right-1/4 w-96 h-96 bg-white/10 rounded-full filter blur-3xl"></div>
+            <div class="absolute -top-1/4 -left-1/4 w-96 h-96 bg-white/10 rounded-full filter blur-3xl"></div>
+        </div>
+        <div class="container mx-auto px-4 relative z-10">
+            <div class="text-center text-white">
+                <h1 class="text-5xl font-bold mb-6">Talent Match Analysis</h1>
+                <p class="text-xl text-blue-100 max-w-2xl mx-auto">Our Resume scoring system analyzes candidate profiles to find your perfect match. Make data-driven hiring decisions with confidence.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Modern Dashboard Content -->
+    <section class="center pb-20">
+        <div class="container mx-auto px-20">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-1 justify-center">
+                {% for i in range(resume_details|length) %}
+                <div class="transform hover:scale-105 transition-all duration-300 mx-auto mt-10">
+                    <div class="bg-white rounded-2xl shadow-xl overflow-hidden">
+                        <!-- Candidate Card Header -->
+                        <div class="bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500 p-6 relative overflow-hidden">
+                            <div class="absolute inset-0 bg-grid opacity-20"></div>
+                            <div class="relative flex justify-between items-start">
+                                <div>
+                                    <span class="px-3 py-1 bg-white/20 rounded-full text-xs text-white mb-3 inline-block">Candidate #{{ "%03d" | format(i + 1) }}</span>
+                                    <h2 class="text-2xl font-bold text-white">Profile Analysis</h2>
+                                </div>
+                                <div class="w-12 h-12 rounded-xl bg-white/20 backdrop-blur-sm flex items-center justify-center">
+                                    <i class="fas fa-user-tie text-white text-xl"></i>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Attractive Score Display -->
+                        <div class="p-6">
+                            <div class="space-y-6">
+                                <!-- Skills Score -->
+                                <div class="score-section">
+                                    <div class="flex justify-between items-center mb-2">
+                                        <span class="text-gray-600 font-medium">Skills Match</span>
+                                        <div class="score-pill blue">
+                                            <i class="fas fa-cogs mr-1"></i>
+                                            {{ similarity_scores[i]['skills_score'] }}%
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Education Score -->
+                                <div class="score-section">
+                                    <div class="flex justify-between items-center mb-2">
+                                        <span class="text-gray-600 font-medium">Education Match</span>
+                                        <div class="score-pill purple">
+                                            <i class="fas fa-graduation-cap mr-1"></i>
+                                            {{ similarity_scores[i]['education_score'] }}%
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <!-- Overall Score -->
+                                <div class="mt-8 pt-6 border-t border-gray-100">
+                                    <div class="text-center">
+                                        <div class="text-sm text-gray-500 mb-2">Overall Match Score</div>
+                                        <div class="text-4xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-blue-600 via-purple-600 to-pink-500">
+                                            {{ similarity_scores[i]['overall_score'] }}%
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </div>
+    </section>
+
+    <style>
+        /* Modern Company Styles */
+        .nav-link {
+        color: #4b5563;
+        font-weight: 500;
+        transition: color 0.3s ease;
+    }
+    .nav-link:hover {
+        color: #7c3aed;
+    }
+    .btn-primary {
+        padding: 12px 24px;
+        background: linear-gradient(to right, #2563eb, #7c3aed);
+        color: white;
+        border-radius: 1rem;
+        font-weight: 500;
+        box-shadow: 0px 4px 6px rgba(59, 130, 246, 0.3);
+        transition: all 0.3s ease;
+    }
+    .btn-primary:hover {
+        background: linear-gradient(to right, #1d4ed8, #6d28d9);
+        box-shadow: 0px 4px 8px rgba(59, 130, 246, 0.4);
+    }
+    .btn-secondary {
+        padding: 12px 24px;
+        background-color: #f3f4f6;
+        color: #374151;
+        border-radius: 1rem;
+        font-weight: 500;
+        transition: background-color 0.3s ease;
+    }
+    .btn-secondary:hover {
+        background-color: #e5e7eb;
+    }
+    .score-pill {
+        padding: 6px 16px;
+        border-radius: 9999px;
+        font-size: 0.875rem;
+        font-weight: 600;
+        display: inline-flex;
+        align-items: center;
+        color: white;
+    }
+    .score-pill.blue {
+        background-color: #3b82f6;
+    }
+    .score-pill.purple {
+        background-color: #8b5cf6;
+    }
+        
+        /* Decorative Patterns */
+        .bg-grid {
+            background-image: 
+                linear-gradient(rgba(255,255,255,0.2) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(255,255,255,0.2) 1px, transparent 1px);
+            background-size: 20px 20px;
+        }
+        .bg-pattern {
+            background-image: 
+                radial-gradient(circle at 1px 1px, rgba(255,255,255,0.15) 1px, transparent 0);
+            background-size: 20px 20px;
+        }
+
+        /* Animation */
+        @keyframes float {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+        .animate-float {
+            animation: float 3s ease-in-out infinite;
+        }
+    </style>
+</body>
+</html>
