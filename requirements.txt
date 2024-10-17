@@ -1,4 +1,4 @@
-Flask
+Flask==1.1.5
 matplotlib
 spacy
 PyMuPDF
@@ -6,6 +6,7 @@ nltk
 requests
 scikit-learn
 beautifulsoup4
-flask-mysql-connector
+flask-mysql-connector==1.0.1
 flask-bcrypt
 gunicorn
+
