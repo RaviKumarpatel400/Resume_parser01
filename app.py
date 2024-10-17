@@ -7,13 +7,13 @@ from resume_parser import parse_resume, get_job_description, calculate_similarit
 
 # Initialize Flask app
 app = Flask(__name__)
-app.secret_key = 'your_secret_key'
+app.secret_key = os.getenv('SECRET_KEY', 'your_secret_key')  # Use environment variable for security
 
-# Configure MySQL connection
-app.config['MYSQL_USER'] = 'root'
-app.config['MYSQL_PASSWORD'] = 'Ramkr@123'
-app.config['MYSQL_DATABASE'] = 'DAML'
-app.config['MYSQL_HOST'] = 'localhost'
+# Configure MySQL connection using environment variables
+app.config['MYSQL_USER'] = os.getenv('MYSQL_USER', 'root')
+app.config['MYSQL_PASSWORD'] = os.getenv('MYSQL_PASSWORD', 'Ramkr@123')
+app.config['MYSQL_DATABASE'] = os.getenv('MYSQL_DATABASE', 'DAML')
+app.config['MYSQL_HOST'] = os.getenv('MYSQL_HOST', 'localhost')
 
 mysql = MySQL(app)
 bcrypt = Bcrypt(app)
@@ -28,9 +28,8 @@ non_matching_skills_list = []
 plt.switch_backend('Agg')
 
 # Add admin credentials (can be stored in the database for production)
-ADMIN_USERNAME = 'admin'
-ADMIN_PASSWORD = 'admin123'  # You can hash this for better security
-
+ADMIN_USERNAME = os.getenv('ADMIN_USERNAME', 'admin')
+ADMIN_PASSWORD = os.getenv('ADMIN_PASSWORD', 'admin123')  # Store admin password in an environment variable for security
 
 @app.route('/admin_login', methods=['GET', 'POST'])
 def admin_login():
@@ -47,13 +46,11 @@ def admin_login():
 
     return render_template('admin_login.html')
 
-
 @app.route('/logout_admin')
 def logout_admin():
     session.pop('admin_loggedin', None)
     flash('Admin logged out successfully', 'success')
     return redirect(url_for('admin_login'))
-
 
 @app.route('/signup', methods=['GET', 'POST'])
 def signup():
@@ -75,7 +72,6 @@ def signup():
         return redirect(url_for('login'))
 
     return render_template('signup.html')
-
 
 @app.route('/login', methods=['GET', 'POST'])
 def login():
@@ -101,7 +97,6 @@ def login():
 
     return render_template('login.html')
 
-
 @app.route('/logout')
 def logout():
     session.pop('loggedin', None)
@@ -109,7 +104,6 @@ def logout():
     session.pop('user_id', None)
     flash('You have successfully logged out.', 'success')
     return redirect(url_for('login'))
-
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
@@ -168,14 +162,12 @@ def index():
 
     return render_template('index.html')
 
-
 @app.route('/candidate_details')
 def candidate_details():
     if not resume_details:
         return redirect(url_for('index'))
 
     return render_template('candidate_details.html', resume_details=resume_details, non_matching_skills=non_matching_skills_list)
-
 
 @app.route('/dashboard')
 def dashboard():
@@ -191,7 +183,6 @@ def dashboard():
     # Pass candidates to the template
     return render_template('dashboard.html', candidates=candidates)
 
-
 @app.route('/similarity_score')
 def similarity_score():
     if not resume_details or not similarity_scores:
@@ -199,14 +190,12 @@ def similarity_score():
 
     return render_template('similarity_score.html', resume_details=resume_details, similarity_scores=similarity_scores)
 
-
 @app.route('/visualization_graph')
 def visualization_graph():
     if not pie_chart_images:
         return redirect(url_for('index'))
 
     return render_template('visualization_graph.html', pie_chart_images=pie_chart_images)
-
 
 @app.route('/similarity_bar_chart')
 def similarity_bar_chart():
