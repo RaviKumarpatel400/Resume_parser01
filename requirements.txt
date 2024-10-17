@@ -1,5 +1,3 @@
-
-
 spacy
 PyMuPDF
 nltk
@@ -10,5 +8,5 @@ Flask==2.3.2
 flask-mysql-connector==1.0.1
 flask-bcrypt==0.7.1
 matplotlib==3.7.1
-resume-parser==0.2.2  # Replace with the actual version if you are using a specific one
-gunicorn==21.2.0  # For deployment
+resume-parser==0.2.2
+gunicorn==21.2.0
