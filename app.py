@@ -1,6 +1,7 @@
 import os
 from flask import Flask, render_template, request, redirect, url_for, session, flash
 from flask_mysql_connector import MySQL
+from flask_mysqldb import MySQL
 from flask_bcrypt import Bcrypt
 import matplotlib.pyplot as plt
 from resume_parser import parse_resume, get_job_description, calculate_similarity, find_non_matching_skills
