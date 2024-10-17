@@ -229,7 +229,3 @@ def similarity_bar_chart():
     plt.close()
 
     return render_template('similarity_bar_chart.html', bar_chart_image=bar_chart_filename)
-
-if __name__ == '__main__':
-    port = int(os.environ.get('PORT', 5000))  # Default to 5000 if PORT is not set
-    app.run(host='0.0.0.0', port=port)  # Listen on all interfaces
